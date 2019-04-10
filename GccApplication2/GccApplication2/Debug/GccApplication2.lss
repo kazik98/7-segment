@@ -3,29 +3,29 @@ GccApplication2.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000000  00800100  00800100  00000182  2**0
+  0 .data         00000000  00800100  00800100  0000016c  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         0000012e  00000000  00000000  00000054  2**1
+  1 .text         00000118  00000000  00000000  00000054  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .comment      00000030  00000000  00000000  00000182  2**0
+  2 .comment      00000030  00000000  00000000  0000016c  2**0
                   CONTENTS, READONLY
-  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000001b4  2**2
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  0000019c  2**2
                   CONTENTS, READONLY
-  4 .debug_aranges 00000028  00000000  00000000  000001f0  2**0
+  4 .debug_aranges 00000020  00000000  00000000  000001d8  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   000009a2  00000000  00000000  00000218  2**0
+  5 .debug_info   0000096f  00000000  00000000  000001f8  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 0000081e  00000000  00000000  00000bba  2**0
+  6 .debug_abbrev 00000800  00000000  00000000  00000b67  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   0000036c  00000000  00000000  000013d8  2**0
+  7 .debug_line   00000311  00000000  00000000  00001367  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  00000034  00000000  00000000  00001744  2**2
+  8 .debug_frame  00000024  00000000  00000000  00001678  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    00000420  00000000  00000000  00001778  2**0
+  9 .debug_str    00000419  00000000  00000000  0000169c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    000001a9  00000000  00000000  00001b98  2**0
+ 10 .debug_loc    00000120  00000000  00000000  00001ab5  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000030  00000000  00000000  00001d41  2**0
+ 11 .debug_ranges 00000010  00000000  00000000  00001bd5  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -109,163 +109,122 @@ Disassembly of section .text:
   92:	d0 e1       	ldi	r29, 0x10	; 16
   94:	de bf       	out	0x3e, r29	; 62
   96:	cd bf       	out	0x3d, r28	; 61
-  98:	06 d0       	rcall	.+12     	; 0xa6 <main>
-  9a:	47 c0       	rjmp	.+142    	; 0x12a <_exit>
+  98:	02 d0       	rcall	.+4      	; 0x9e <main>
+  9a:	3c c0       	rjmp	.+120    	; 0x114 <_exit>
 
 0000009c <__bad_interrupt>:
   9c:	b1 cf       	rjmp	.-158    	; 0x0 <__vectors>
 
-0000009e <preset>:
-#define F_CPU 8000000
+0000009e <main>:
 #include <avr/io.h>
 #include <util/delay.h>
 
-void preset(){
-	DDRD = 0b11111111;
+int main(void)
+{
+	DDRD = 0xFF;
   9e:	8f ef       	ldi	r24, 0xFF	; 255
   a0:	81 bb       	out	0x11, r24	; 17
-	PORTD = 0b00000000;
+	PORTD = 0x00;
   a2:	12 ba       	out	0x12, r1	; 18
-  a4:	08 95       	ret
-
-000000a6 <main>:
-}
-
-int main(void)
-{
-	preset();
-  a6:	fb df       	rcall	.-10     	; 0x9e <preset>
+	
 	while (1)
 	{
-		for(int i=0;i<=4;i++)
-		{
-			PORTD = 0b11101111;
-  a8:	6f ee       	ldi	r22, 0xEF	; 239
-			_delay_ms(500);
-			PORTD = 0x00;
-			
-			PORTD = 0b11111111;
-  aa:	5f ef       	ldi	r21, 0xFF	; 255
-			_delay_ms(500);
-			PORTD = 0x00;
-			
-			PORTD = 0b00000111;
-  ac:	47 e0       	ldi	r20, 0x07	; 7
-			_delay_ms(500);
-			PORTD = 0x00;
-			
-			PORTD = 0b11111101;
-  ae:	3d ef       	ldi	r19, 0xFD	; 253
-			_delay_ms(500);
-			PORTD = 0x00;
-			
-			PORTD = 0b11101101;
-  b0:	2d ee       	ldi	r18, 0xED	; 237
-	DDRD = 0b11111111;
-	PORTD = 0b00000000;
-}
-
-int main(void)
-{
-  b2:	85 e0       	ldi	r24, 0x05	; 5
-  b4:	90 e0       	ldi	r25, 0x00	; 0
-	preset();
+		PORTD = 0b01101111;
+  a4:	4f e6       	ldi	r20, 0x6F	; 111
+		_delay_ms(500);
+		
+		PORTD = 0b01111111;
+  a6:	3f e7       	ldi	r19, 0x7F	; 127
+		_delay_ms(500);
+		
+		PORTD = 0b00000111;
+  a8:	27 e0       	ldi	r18, 0x07	; 7
+		_delay_ms(500);
+		
+		PORTD = 0b01111101;
+  aa:	9d e7       	ldi	r25, 0x7D	; 125
+		_delay_ms(500);
+		
+		PORTD = 0b01101101;
+  ac:	8d e6       	ldi	r24, 0x6D	; 109
+	DDRD = 0xFF;
+	PORTD = 0x00;
+	
 	while (1)
 	{
-		for(int i=0;i<=4;i++)
-		{
-			PORTD = 0b11101111;
-  b6:	62 bb       	out	0x12, r22	; 18
+		PORTD = 0b01101111;
+  ae:	42 bb       	out	0x12, r20	; 18
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
-  b8:	7f ef       	ldi	r23, 0xFF	; 255
-  ba:	e4 e3       	ldi	r30, 0x34	; 52
-  bc:	fc e0       	ldi	r31, 0x0C	; 12
-  be:	71 50       	subi	r23, 0x01	; 1
-  c0:	e0 40       	sbci	r30, 0x00	; 0
-  c2:	f0 40       	sbci	r31, 0x00	; 0
-  c4:	e1 f7       	brne	.-8      	; 0xbe <main+0x18>
-  c6:	00 c0       	rjmp	.+0      	; 0xc8 <main+0x22>
-  c8:	00 00       	nop
-			_delay_ms(500);
-			PORTD = 0x00;
-  ca:	12 ba       	out	0x12, r1	; 18
-			
-			PORTD = 0b11111111;
-  cc:	52 bb       	out	0x12, r21	; 18
-  ce:	7f ef       	ldi	r23, 0xFF	; 255
-  d0:	e4 e3       	ldi	r30, 0x34	; 52
-  d2:	fc e0       	ldi	r31, 0x0C	; 12
-  d4:	71 50       	subi	r23, 0x01	; 1
-  d6:	e0 40       	sbci	r30, 0x00	; 0
-  d8:	f0 40       	sbci	r31, 0x00	; 0
-  da:	e1 f7       	brne	.-8      	; 0xd4 <main+0x2e>
-  dc:	00 c0       	rjmp	.+0      	; 0xde <main+0x38>
-  de:	00 00       	nop
-			_delay_ms(500);
-			PORTD = 0x00;
-  e0:	12 ba       	out	0x12, r1	; 18
-			
-			PORTD = 0b00000111;
-  e2:	42 bb       	out	0x12, r20	; 18
-  e4:	7f ef       	ldi	r23, 0xFF	; 255
-  e6:	e4 e3       	ldi	r30, 0x34	; 52
-  e8:	fc e0       	ldi	r31, 0x0C	; 12
-  ea:	71 50       	subi	r23, 0x01	; 1
-  ec:	e0 40       	sbci	r30, 0x00	; 0
-  ee:	f0 40       	sbci	r31, 0x00	; 0
-  f0:	e1 f7       	brne	.-8      	; 0xea <main+0x44>
-  f2:	00 c0       	rjmp	.+0      	; 0xf4 <main+0x4e>
-  f4:	00 00       	nop
-			_delay_ms(500);
-			PORTD = 0x00;
-  f6:	12 ba       	out	0x12, r1	; 18
-			
-			PORTD = 0b11111101;
-  f8:	32 bb       	out	0x12, r19	; 18
-  fa:	7f ef       	ldi	r23, 0xFF	; 255
-  fc:	e4 e3       	ldi	r30, 0x34	; 52
-  fe:	fc e0       	ldi	r31, 0x0C	; 12
- 100:	71 50       	subi	r23, 0x01	; 1
- 102:	e0 40       	sbci	r30, 0x00	; 0
- 104:	f0 40       	sbci	r31, 0x00	; 0
- 106:	e1 f7       	brne	.-8      	; 0x100 <main+0x5a>
- 108:	00 c0       	rjmp	.+0      	; 0x10a <main+0x64>
- 10a:	00 00       	nop
-			_delay_ms(500);
-			PORTD = 0x00;
- 10c:	12 ba       	out	0x12, r1	; 18
-			
-			PORTD = 0b11101101;
- 10e:	22 bb       	out	0x12, r18	; 18
- 110:	7f ef       	ldi	r23, 0xFF	; 255
- 112:	e4 e3       	ldi	r30, 0x34	; 52
- 114:	fc e0       	ldi	r31, 0x0C	; 12
- 116:	71 50       	subi	r23, 0x01	; 1
- 118:	e0 40       	sbci	r30, 0x00	; 0
- 11a:	f0 40       	sbci	r31, 0x00	; 0
- 11c:	e1 f7       	brne	.-8      	; 0x116 <main+0x70>
- 11e:	00 c0       	rjmp	.+0      	; 0x120 <main+0x7a>
- 120:	00 00       	nop
-			_delay_ms(500);
-			PORTD = 0x00;
- 122:	12 ba       	out	0x12, r1	; 18
- 124:	01 97       	sbiw	r24, 0x01	; 1
-int main(void)
-{
-	preset();
-	while (1)
-	{
-		for(int i=0;i<=4;i++)
- 126:	39 f6       	brne	.-114    	; 0xb6 <main+0x10>
- 128:	c4 cf       	rjmp	.-120    	; 0xb2 <main+0xc>
+  b0:	5f ef       	ldi	r21, 0xFF	; 255
+  b2:	64 e3       	ldi	r22, 0x34	; 52
+  b4:	7c e0       	ldi	r23, 0x0C	; 12
+  b6:	51 50       	subi	r21, 0x01	; 1
+  b8:	60 40       	sbci	r22, 0x00	; 0
+  ba:	70 40       	sbci	r23, 0x00	; 0
+  bc:	e1 f7       	brne	.-8      	; 0xb6 <main+0x18>
+  be:	00 c0       	rjmp	.+0      	; 0xc0 <main+0x22>
+  c0:	00 00       	nop
+		_delay_ms(500);
+		
+		PORTD = 0b01111111;
+  c2:	32 bb       	out	0x12, r19	; 18
+  c4:	5f ef       	ldi	r21, 0xFF	; 255
+  c6:	64 e3       	ldi	r22, 0x34	; 52
+  c8:	7c e0       	ldi	r23, 0x0C	; 12
+  ca:	51 50       	subi	r21, 0x01	; 1
+  cc:	60 40       	sbci	r22, 0x00	; 0
+  ce:	70 40       	sbci	r23, 0x00	; 0
+  d0:	e1 f7       	brne	.-8      	; 0xca <main+0x2c>
+  d2:	00 c0       	rjmp	.+0      	; 0xd4 <main+0x36>
+  d4:	00 00       	nop
+		_delay_ms(500);
+		
+		PORTD = 0b00000111;
+  d6:	22 bb       	out	0x12, r18	; 18
+  d8:	5f ef       	ldi	r21, 0xFF	; 255
+  da:	64 e3       	ldi	r22, 0x34	; 52
+  dc:	7c e0       	ldi	r23, 0x0C	; 12
+  de:	51 50       	subi	r21, 0x01	; 1
+  e0:	60 40       	sbci	r22, 0x00	; 0
+  e2:	70 40       	sbci	r23, 0x00	; 0
+  e4:	e1 f7       	brne	.-8      	; 0xde <main+0x40>
+  e6:	00 c0       	rjmp	.+0      	; 0xe8 <main+0x4a>
+  e8:	00 00       	nop
+		_delay_ms(500);
+		
+		PORTD = 0b01111101;
+  ea:	92 bb       	out	0x12, r25	; 18
+  ec:	5f ef       	ldi	r21, 0xFF	; 255
+  ee:	64 e3       	ldi	r22, 0x34	; 52
+  f0:	7c e0       	ldi	r23, 0x0C	; 12
+  f2:	51 50       	subi	r21, 0x01	; 1
+  f4:	60 40       	sbci	r22, 0x00	; 0
+  f6:	70 40       	sbci	r23, 0x00	; 0
+  f8:	e1 f7       	brne	.-8      	; 0xf2 <main+0x54>
+  fa:	00 c0       	rjmp	.+0      	; 0xfc <main+0x5e>
+  fc:	00 00       	nop
+		_delay_ms(500);
+		
+		PORTD = 0b01101101;
+  fe:	82 bb       	out	0x12, r24	; 18
+ 100:	5f ef       	ldi	r21, 0xFF	; 255
+ 102:	64 e3       	ldi	r22, 0x34	; 52
+ 104:	7c e0       	ldi	r23, 0x0C	; 12
+ 106:	51 50       	subi	r21, 0x01	; 1
+ 108:	60 40       	sbci	r22, 0x00	; 0
+ 10a:	70 40       	sbci	r23, 0x00	; 0
+ 10c:	e1 f7       	brne	.-8      	; 0x106 <main+0x68>
+ 10e:	00 c0       	rjmp	.+0      	; 0x110 <main+0x72>
+ 110:	00 00       	nop
+ 112:	cd cf       	rjmp	.-102    	; 0xae <main+0x10>
 
-0000012a <_exit>:
- 12a:	f8 94       	cli
+00000114 <_exit>:
+ 114:	f8 94       	cli
 
-0000012c <__stop_program>:
- 12c:	ff cf       	rjmp	.-2      	; 0x12c <__stop_program>
+00000116 <__stop_program>:
+ 116:	ff cf       	rjmp	.-2      	; 0x116 <__stop_program>
